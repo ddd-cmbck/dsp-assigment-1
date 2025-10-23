@@ -26,7 +26,7 @@ func main() {
 		log.Fatalf("[Core Service] Failed to listen on %s: %v", address, err)
 	}
 
-	// Create server with injected logic
+	// create a server with injected logic
 	server := &api.CoreServer{
 		GenerateLetters: util.GenerateWord,
 		PickCenter:      util.PickOne,

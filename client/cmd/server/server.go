@@ -1,28 +1,46 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"log"
+
+	"github.com/ddd-cmbck/dsp-assigment-1/client/internal/api"
+	"github.com/ddd-cmbck/dsp-assigment-1/client/internal/util"
+)
+
+var (
+	server_link = flag.String("serverLink", "localhost:4000", "The gRPC server port link")
 )
 
 func main() {
+	flag.Parse()
 	RUN := true
 	score := 0
 	points := 0
+
+	client, err := api.NewClient(*server_link)
+	if err != nil {
+		log.Fatalf("Failed to connect to core service: %v", err)
+	}
+
+	letters, center, err := client.GetLetters()
+	if err != nil {
+		log.Fatalf("Failed to get letters: %v", err)
+	}
+
+	letters, err = util.RenderWord(letters, center)
+	if err != nil {
+		log.Fatalf("Failed to render letters: %v", err)
+	}
 
 	fmt.Print(
 		"Spelling Bee!\n",
 		"Enter \\qt or press CTRL + C if you want to close the game\n\n",
 	)
 
-	fmt.Println("Requesting letters from core service...")
-	// letters, err := repo.getLetters()
-
 	for RUN {
 
-		var letters string = "A B C [D] E F G"
-		// if err != nil {
-		// log.Fatalf("%s", err)
-		// }
 		fmt.Print(letters, "\n")
 
 		var word string

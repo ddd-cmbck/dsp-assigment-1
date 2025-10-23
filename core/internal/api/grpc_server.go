@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"log"
 
 	pb "github.com/ddd-cmbck/dsp-assigment-1/proto"
 )
@@ -23,6 +24,8 @@ func (s *CoreServer) GetLetters(ctx context.Context, req *pb.LettersRequest) (*p
 		Letters: letters,
 		Center:  center,
 	}
+
+	log.Printf("[Core Service] Sending response to client: Letters=%v | Center=%s", resp.Letters, resp.Center)
 
 	return resp, nil
 }

@@ -10,23 +10,22 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type CoreRepo struct {
+type Client struct {
 	client pb.CoreClient
 }
 
-func NewCoreRepo(address string) (*CoreRepo, error) {
-	// Create client connection using NewClient
+func NewClient(address string) (*Client, error) {
+
 	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create grpc client: %w", err)
 	}
 
 	client := pb.NewCoreClient(conn)
-	return &CoreRepo{client: client}, nil
+	return &Client{client: client}, nil
 }
 
-// GetLetters remains the same
-func (r *CoreRepo) GetLetters() ([]string, string, error) {
+func (r *Client) GetLetters() ([]string, string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 
