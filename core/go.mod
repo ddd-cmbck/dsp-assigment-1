@@ -13,3 +13,5 @@ require (
 	google.golang.org/protobuf v1.36.10 // indirect
 	github.com/ddd-cmbck/dsp-assigment-1/proto v0.0.0
 )
+
+replace github.com/ddd-cmbck/dsp-assigment-1/proto => ../proto
