@@ -11,7 +11,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251022142026-3a174f9686a8 // indirect
 	google.golang.org/grpc v1.76.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
-	github.com/ddd-cmbck/dsp-assigment-1/proto v0.0.0
+	github.com/ddd-cmbck/dsp-assigment-1/proto v0.1.0
 )
 
 replace github.com/ddd-cmbck/dsp-assigment-1/proto => ../proto

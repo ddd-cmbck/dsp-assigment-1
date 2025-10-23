@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 
-	pb "github.com/ddd-cmbck/dsp-assigment-1/core/internal/api/letterspb"
+	pb "github.com/ddd-cmbck/dsp-assigment-1/proto"
 )
 
 // CoreServer implements the Core gRPC service defined in letters.proto

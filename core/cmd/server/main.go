@@ -7,8 +7,8 @@ import (
 	"net"
 
 	"github.com/ddd-cmbck/dsp-assigment-1/core/internal/api"
-	pb "github.com/ddd-cmbck/dsp-assigment-1/core/internal/api/letterspb"
 	"github.com/ddd-cmbck/dsp-assigment-1/core/internal/util"
+	pb "github.com/ddd-cmbck/dsp-assigment-1/proto"
 
 	"google.golang.org/grpc"
 )

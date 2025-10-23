@@ -5,27 +5,27 @@ import (
 	"fmt"
 	"time"
 
-	pb "github.com/ddd-cmbck/dsp-assigment-1/proto/letters"
-
+	pb "github.com/ddd-cmbck/dsp-assigment-1/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type CoreRepo struct {
 	client pb.CoreClient
 }
 
-// NewCoreRepo connects to the Core gRPC service
 func NewCoreRepo(address string) (*CoreRepo, error) {
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	// Create client connection using NewClient
+	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to core service: %w", err)
+		return nil, fmt.Errorf("failed to create grpc client: %w", err)
 	}
 
 	client := pb.NewCoreClient(conn)
 	return &CoreRepo{client: client}, nil
 }
 
-// GetLetters fetches letters and the center letter from the Core service
+// GetLetters remains the same
 func (r *CoreRepo) GetLetters() ([]string, string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
