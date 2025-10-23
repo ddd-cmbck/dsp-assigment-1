@@ -1,0 +1,43 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"log"
+	"net"
+
+	"github.com/ddd-cmbck/dsp-assigment-1/core/internal/api"
+	pb "github.com/ddd-cmbck/dsp-assigment-1/core/internal/api/letterspb"
+	"github.com/ddd-cmbck/dsp-assigment-1/core/internal/util"
+
+	"google.golang.org/grpc"
+)
+
+var (
+	port = flag.Int("port", 4000, "The gRPC server port")
+)
+
+func main() {
+	flag.Parse()
+
+	address := fmt.Sprintf("localhost:%d", *port)
+	listener, err := net.Listen("tcp", address)
+	if err != nil {
+		log.Fatalf("[Core Service] Failed to listen on %s: %v", address, err)
+	}
+
+	// Create server with injected logic
+	server := &api.CoreServer{
+		GenerateLetters: util.GenerateWord,
+		PickCenter:      util.PickOne,
+	}
+
+	grpcServer := grpc.NewServer()
+	pb.RegisterCoreServer(grpcServer, server)
+
+	log.Printf("[Core Service] gRPC server listening on %s", address)
+
+	if err := grpcServer.Serve(listener); err != nil {
+		log.Fatalf("[Core Service] Failed to serve: %v", err)
+	}
+}

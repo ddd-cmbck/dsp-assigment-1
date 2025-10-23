@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package letters;
+
+option go_package = "./letters/";
+
+service Core {
+    rpc GetLetters (LettersRequest) returns (LettersResponse);
+}
+
+message LettersRequest {}
+
+message LettersResponse {
+    repeated string letters = 1;
+    string center = 2;
+}
+
+
+

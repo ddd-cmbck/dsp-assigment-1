@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -e
 set -o pipefail
 
@@ -6,7 +8,7 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No colour
 
-echo -e "${YELLOW} Running tests for Client service...${NC}"
+echo -e "${YELLOW} Running tests for Core service...${NC}"
 cd "$(dirname "$0")/.."  # Move to /client directory
 
 if go test ./... -v; then
@@ -15,6 +17,8 @@ else
     echo -e "${RED} Tests failed. Aborting generation.${NC}"
     exit 1
 fi
+
+echo " " 
 
 echo -e "${YELLOW} Generating gRPC Go files from proto definitions...${NC}"
 
@@ -35,10 +39,10 @@ if ! command -v protoc-gen-go-grpc >/dev/null 2>&1; then
     exit 1
 fi
 
-# protoc \
-#   --go_out=internal/api \
-#   --go-grpc_out=internal/api \
-#   --proto_path=proto \
-#   proto/*.proto
+protoc \
+  --go_out=. \
+  --go-grpc_out=. \
+  --proto_path=proto \
+  proto/*.proto
 
 echo -e "${GREEN} gRPC files generated successfully into internal/api!${NC}"
