@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package letters;
+
+option go_package = "github.com/ddd-cmbck/dsp-assigment-1/proto;letters";
+
+
+service Core {
+    rpc GetLetters (LettersRequest) returns (LettersResponse);
+    rpc GetScore (UserWord) returns (Score);
+}
+
+message UserWord {
+    string word = 1;
+    repeated string letters = 2;
+}
+
+message Score {
+    int32 score = 1;
+}
+
+message LettersRequest {}
+
+message LettersResponse {
+    repeated string letters = 1;
+    string center = 2;
+}
+
+
+

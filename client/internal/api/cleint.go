@@ -2,10 +2,11 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
-	pb "github.com/ddd-cmbck/dsp-assigment-1/proto"
+	pb "github.com/ddd-cmbck/dsp-assigment-1/proto/core"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -25,8 +26,8 @@ func NewClient(address string) (*Client, error) {
 	return &Client{client: client}, nil
 }
 
-func (r *Client) GetLetters() ([]string, string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+func (r *Client) GetLetters(ctx context.Context) ([]string, string, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*3)
 	defer cancel()
 
 	resp, err := r.client.GetLetters(ctx, &pb.LettersRequest{})
@@ -35,4 +36,16 @@ func (r *Client) GetLetters() ([]string, string, error) {
 	}
 
 	return resp.Letters, resp.Center, nil
+}
+
+func (r *Client) GetScore(ctx context.Context, word string, letters []string) (int32, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Second)
+	defer cancel()
+
+	resp, err := r.client.GetScore(ctx, &pb.UserWord{Word: word, Letters: letters})
+	if err != nil {
+		return 0, errors.New("[Client]Failed to get score")
+	}
+
+	return resp.Score, nil
 }

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package dicitionary;
+
+option go_package = "github.com/ddd-cmbck/dsp-assigment-1/proto;dict";
+
+service Dictionary {
+    rpc CheckWord (WordRequest) returns (WordResponse);
+}
+
+message WordRequest {
+    string word = 1;
+}
+
+message WordResponse {
+    bool exists = 1;
+}

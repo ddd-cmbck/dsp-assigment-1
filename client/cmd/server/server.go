@@ -1,35 +1,36 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 
 	"github.com/ddd-cmbck/dsp-assigment-1/client/internal/api"
+	"github.com/ddd-cmbck/dsp-assigment-1/client/internal/service"
 	"github.com/ddd-cmbck/dsp-assigment-1/client/internal/util"
 )
 
 var (
-	server_link = flag.String("serverLink", "localhost:4000", "The gRPC server port link")
+	CORE_ADDR = flag.String("core_addr", "localhost:4000", "The Core gRPC server port")
 )
 
 func main() {
 	flag.Parse()
 	RUN := true
-	score := 0
-	points := 0
+	var score int32
 
-	client, err := api.NewClient(*server_link)
+	client, err := api.NewClient(*CORE_ADDR)
 	if err != nil {
 		log.Fatalf("Failed to connect to core service: %v", err)
 	}
 
-	letters, center, err := client.GetLetters()
+	letters, center, err := client.GetLetters(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to get letters: %v", err)
 	}
 
-	letters, err = util.RenderWord(letters, center)
+	formated_letters, err := util.RenderWord(letters, center)
 	if err != nil {
 		log.Fatalf("Failed to render letters: %v", err)
 	}
@@ -41,7 +42,7 @@ func main() {
 
 	for RUN {
 
-		fmt.Print(letters, "\n")
+		fmt.Print(formated_letters, "\n")
 
 		var word string
 		fmt.Print("> ")
@@ -51,12 +52,14 @@ func main() {
 			break
 		}
 
-		fmt.Println("Send the word back to core service...")
-		// points, err = repo.sendWord(word)
+		points, err := client.GetScore(context.Background(), word, letters)
+		if err != nil {
+			log.Fatalf("Failed to get score: %v", err)
+		}
 
-		points = 10
 		score += points
-		fmt.Printf("Valid word scoring %d points. Current score: %d  \n\n", points, score)
+		service.PrintMessage(points)
+		service.PrintScore(score)
 
 	}
 
